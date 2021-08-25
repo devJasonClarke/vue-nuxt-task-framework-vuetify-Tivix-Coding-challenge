@@ -2,29 +2,36 @@
   <v-container>
     <h1>Tivix Coding Task</h1>
     <v-form @submit.prevent="fetchApi">
-      <v-text-field
-        name="name"
-        label="label"
-        id="id"
-        outlined
-        v-model="city"
-      ></v-text-field>
-      {{ posts }}
+      <v-row>
+        <v-col cols="10">
+          <v-text-field
+            name="city"
+            label="Please enter city"
+            id="city"
+            outlined
+            dense
+            v-model="city"
+          ></v-text-field
+        ></v-col>
+        <v-col> <v-btn color="success" type="submit">Get Weather</v-btn></v-col>
+      </v-row>
+
       {{ cities }}
       {{ error }}
-      <v-btn color="success" type="submit">text</v-btn>
     </v-form>
     <v-data-table
       :headers="headers"
       :items="cities"
       :sort-by="['temp', 'temp_max', 'temp_min']"
-      :sort-desc="[false, true]"
+      :sort-desc="[true, false]"
       class="elevation-1"
     ></v-data-table>
     <v-btn @click="showMin">Show Min</v-btn>
+    <v-btn @click="showMax">Show Max</v-btn>
+    <v-btn @click="showMean">Show Mean</v-btn>
     <p>Minimum Temperature: {{ min }}</p>
-    <p>Minimum Temperature: {{ min }}</p>
-    <p>Minimum Temperature: {{ min }}</p>
+    <p>Maximum Temperature: {{ max }}</p>
+    <p>Mean Temperature: {{ mean }}</p>
   </v-container>
 </template>
 <script>
@@ -36,10 +43,10 @@ export default {
       error: "",
       headers: [
         {
-          text: "Country",
+          text: "City",
           align: "start",
           sortable: false,
-          value: "country"
+          value: "city"
         },
         { text: "Weather", value: "weather" },
         { text: "Temperature", value: "temp" },
@@ -49,7 +56,9 @@ export default {
         { text: "Clouds", value: "clouds" }
       ],
       cities: [],
-      min: []
+      min: "",
+      max: "",
+      mean: ""
     };
   },
   methods: {
@@ -59,7 +68,7 @@ export default {
           `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${process.env.api}`
         )
         .then(res => {
-          let country = res.name;
+          let city = res.name;
           let weather = res.weather[0].description;
           let temp = res.main.temp;
           let temp_max = res.main.temp_max;
@@ -67,7 +76,7 @@ export default {
           let humidity = res.main.humidity;
           let clouds = res.clouds.all;
           this.cities.push({
-            country,
+            city,
             weather,
             temp,
             temp_max,
@@ -81,9 +90,28 @@ export default {
         });
     },
     showMin() {
-      let min = Math.min(...this.cities.map(city => city.temp));
-      this.min.push(min);
-    }
+      let min = Math.min(...this.cities.map(city => city.temp_min));
+      this.min = min;
+    },
+    showMax() {
+      let max = Math.max(...this.cities.map(city => city.temp_max));
+      this.max = max;
+    },
+    showMean() {
+      let total = 0;
+      let cities = [...this.cities];
+      console.log(total);
+      //total = total.temp.reduce((a, b) => a + b, 0);
+      console.log(total);
+
+      for (let i = 0; i < cities.length; i += 1) {
+        total += cities[i].temp;
+      }
+      let mean = total / cities.length;
+
+      this.mean = mean;
+    },
+
   }
 };
 </script>
