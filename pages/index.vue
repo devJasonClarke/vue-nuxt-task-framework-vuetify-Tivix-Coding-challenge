@@ -29,9 +29,11 @@
     <v-btn @click="showMin">Show Min</v-btn>
     <v-btn @click="showMax">Show Max</v-btn>
     <v-btn @click="showMean">Show Mean</v-btn>
+    <v-btn @click="showMode">Show Mode</v-btn>
     <p>Minimum Temperature: {{ min }}</p>
     <p>Maximum Temperature: {{ max }}</p>
     <p>Mean Temperature: {{ mean }}</p>
+    <p>Mode Temperature: {{ mode }}</p>
   </v-container>
 </template>
 <script>
@@ -58,7 +60,8 @@ export default {
       cities: [],
       min: "",
       max: "",
-      mean: ""
+      mean: "",
+      mode: ""
     };
   },
   methods: {
@@ -100,6 +103,7 @@ export default {
     showMean() {
       let total = 0;
       let cities = [...this.cities];
+
       console.log(total);
       //total = total.temp.reduce((a, b) => a + b, 0);
       console.log(total);
@@ -111,7 +115,38 @@ export default {
 
       this.mean = mean;
     },
+    showMode() {
+      let cities = [...this.cities];
+      let numbers = [];
+      let modes = [];
+      let = count = [];
+      let = i;
+      let = number;
+      let = maxIndex = 0;
 
+      for (let i = 0; i < cities.length; i += 1) {
+        numbers.push(cities[i].temp);
+      }
+
+      console.log(numbers);
+
+      for (i = 0; i < numbers.length; i += 1) {
+        number = numbers[i];
+        count[number] = (count[number] || 0) + 1;
+        if (count[number] > maxIndex) {
+          maxIndex = count[number];
+        }
+      }
+
+      for (i in count)
+        if (count.hasOwnProperty(i)) {
+          if (count[i] === maxIndex) {
+            modes.push(Number(i));
+          }
+        }
+
+      this.mode = modes[0];
+    }
   }
 };
 </script>
