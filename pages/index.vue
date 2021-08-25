@@ -119,10 +119,10 @@ export default {
       let cities = [...this.cities];
       let numbers = [];
       let modes = [];
-      let = count = [];
-      let = i;
-      let = number;
-      let = maxIndex = 0;
+      let count = [];
+      let i;
+      let number;
+      let maxIndex = 0;
 
       for (let i = 0; i < cities.length; i += 1) {
         numbers.push(cities[i].temp);
@@ -141,11 +141,11 @@ export default {
       for (i in count)
         if (count.hasOwnProperty(i)) {
           if (count[i] === maxIndex) {
-            modes.push(Number(i));
+            modes = Number(i);
           }
         }
 
-      this.mode = modes[0];
+      this.mode = modes;
     }
   }
 };
