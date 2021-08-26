@@ -27,6 +27,11 @@
             mdi-chevron-down mdi-24px
           </v-icon>
         </template>
+        <template v-slot:[`item.delete`]="{ item }">
+          <v-icon small @click="deleteCity(item, 'cities')">
+            mdi-delete
+          </v-icon>
+        </template>
       </v-data-table>
       <v-row class="py-12">
         <v-col cols="12" sm="3">
@@ -85,6 +90,11 @@
         :items="fiveDay"
         class="elevation-1"
       >
+        <template v-slot:[`item.delete`]="{ item }">
+          <v-icon small @click="deleteCity(item, 'fiveDays')">
+            mdi-delete
+          </v-icon>
+        </template>
       </v-data-table>
       <v-row class="py-12">
         <v-col cols="12" sm="3">
@@ -152,7 +162,6 @@ export default {
     return {
       city: "",
       dialog: false,
-      fiveDay: [],
       expanded: [],
       singleExpand: false,
       apiInfo: "value",
@@ -175,6 +184,12 @@ export default {
           align: "start",
           sortable: false,
           value: "see_more"
+        },
+        {
+          text: "delete",
+          align: "start",
+          sortable: false,
+          value: "delete"
         }
       ],
       fiveDayHeaders: [
@@ -195,10 +210,16 @@ export default {
           align: "start",
           sortable: false,
           value: "time"
+        },
+        {
+          text: "delete",
+          align: "start",
+          sortable: false,
+          value: "delete"
         }
       ],
       cities: [],
-      fiveDayCities: [],
+      fiveDay: [],
       min: "",
       max: "",
       mean: "",
@@ -254,7 +275,7 @@ export default {
         )
         .then(res => {
           this.$vuetify.goTo("#results");
-          console.log(res);
+          //  console.log(res);
           let day = new Date(res.list[0].dt * 1000);
           //   this.fiveDay.push(day);
 
@@ -320,9 +341,9 @@ export default {
         cities = [...this.fiveDay];
       }
 
-      console.log(total);
-      //total = total.temp.reduce((a, b) => a + b, 0);
-      console.log(total);
+      /*    console.log(total);
+      total = total.temp.reduce((a, b) => a + b, 0);
+      console.log(total); */
 
       for (let i = 0; i < cities.length; i += 1) {
         total += cities[i].temp;
@@ -354,7 +375,7 @@ export default {
         numbers.push(cities[i].temp);
       }
 
-      console.log(numbers);
+      //console.log(numbers);
 
       for (i = 0; i < numbers.length; i += 1) {
         number = numbers[i];
@@ -400,6 +421,17 @@ export default {
       var minutes = "0" + unixDate.getMinutes();
       let time = `${date} ${month} ${year} - ${hour}:${minutes}`;
       return time;
+    },
+    deleteCity(item, dataTable) {
+      if (dataTable == "cities") {
+        let index = this.cities.indexOf(item);
+
+        this.cities.splice(index, 1);
+      } else {
+        let index = this.fiveDay.indexOf(item);
+
+        this.fiveDay.splice(index, 1);
+      }
     }
   }
 };
