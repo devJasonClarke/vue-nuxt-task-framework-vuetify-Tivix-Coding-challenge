@@ -237,7 +237,7 @@ export default {
         })
         .catch(() => {
           this.error =
-            "Something went wrong. Please check you spelling or the internet.";
+            "Something went wrong. Please check your spelling or the internet.";
           this.snackbar = true;
         });
     },
