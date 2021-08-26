@@ -1,8 +1,9 @@
 <template>
-  <v-main>
+  <v-main class="main-padding bg">
     <v-container>
       <h1>Tivix Coding Task</h1>
-      <v-form @submit.prevent="fetchApi">
+
+      <v-form @submit.prevent="fetchApi" class="mt-6">
         <v-row>
           <v-col cols="10">
             <v-text-field
@@ -12,15 +13,15 @@
               outlined
               dense
               v-model="city"
+              :rules="[v => !!v || 'City is required']"
             ></v-text-field
           ></v-col>
           <v-col>
-            <v-btn color="success" type="submit">Get Weather</v-btn></v-col
+            <v-btn elevation="0" color="success" type="submit"
+              >Get Weather</v-btn
+            ></v-col
           >
         </v-row>
-        <!--  {{ fiveDay }}
-        {{ cities }}
-        {{ error }} -->
       </v-form>
       <v-data-table :headers="headers" :items="cities" class="elevation-1">
         <template v-slot:[`item.see_more`]="{ item }">
@@ -29,22 +30,86 @@
           </v-icon>
         </template>
       </v-data-table>
-      <v-btn @click="showMin">Show Min</v-btn>
-      <v-btn @click="showMax">Show Max</v-btn>
-      <v-btn @click="showMean">Show Mean</v-btn>
-      <v-btn @click="showMode">Show Mode</v-btn>
-      <p>Minimum Temperature: {{ min }}</p>
-      <p>Maximum Temperature: {{ max }}</p>
-      <p>Mean Temperature: {{ mean }}</p>
-      <p>Mode Temperature: {{ mode }}</p>
+      <v-row class="py-12">
+        <v-col cols="12" sm="3">
+          <v-btn elevation="0" @click="showMin('cities')"
+            >Show Min</v-btn
+          ></v-col
+        >
+        <v-col>
+          <p>Minimum Temperature: {{ min }}</p></v-col
+        >
+        <v-col cols="12" sm="3">
+          <v-btn elevation="0" @click="showMax('cities')"
+            >Show Max</v-btn
+          ></v-col
+        >
+
+        <v-col cols="12" sm="3">
+          <p>Maximum Temperature: {{ max }}</p></v-col
+        >
+        <v-col cols="12" sm="3">
+          <v-btn elevation="0" @click="showMean('cities')"
+            >Show Mean</v-btn
+          ></v-col
+        >
+        <v-col>
+          <p>Mean Temperature: {{ mean }}</p></v-col
+        >
+        <v-col cols="12" sm="3">
+          <v-btn elevation="0" @click="showMode('cities')"
+            >Show Mode</v-btn
+          ></v-col
+        >
+
+        <v-col>
+          <p>Mode Temperature: {{ mode }}</p></v-col
+        >
+      </v-row>
     </v-container>
-    <v-container id="fiveDays">
+    <v-container id="results">
       <v-data-table
         :headers="fiveDayHeaders"
         :items="fiveDay"
         class="elevation-1"
       >
       </v-data-table>
+      <v-row class="py-12">
+        <v-col cols="12" sm="3">
+          <v-btn elevation="0" @click="showMin('fiveDays')"
+            >Show Min</v-btn
+          ></v-col
+        >
+        <v-col>
+          <p>Minimum Temperature: {{ fiveDayMin }}</p></v-col
+        >
+        <v-col cols="12" sm="3">
+          <v-btn elevation="0" @click="showMax('fiveDays')"
+            >Show Max</v-btn
+          ></v-col
+        >
+
+        <v-col cols="12" sm="3">
+          <p>Maximum Temperature: {{ fiveDayMax }}</p></v-col
+        >
+        <v-col cols="12" sm="3">
+          <v-btn elevation="0" @click="showMean('fiveDays')"
+            >Show Mean</v-btn
+          ></v-col
+        >
+        <v-col>
+          <p>Mean Temperature: {{ fiveDayMean }}</p></v-col
+        >
+        <v-col cols="12" sm="3">
+          <v-btn elevation="0" @click="showMode('fiveDays')"
+            >Show Mode</v-btn
+          ></v-col
+        >
+
+        <v-col>
+          <p>Mode Temperature: {{ fiveDayMode }}</p></v-col
+        >
+      </v-row>
     </v-container>
   </v-main>
 </template>
@@ -70,10 +135,10 @@ export default {
         { text: "Temperature", value: "temp" },
         { text: "Max Temperature", value: "temp_max" },
         { text: "Min Temperature", value: "temp_min" },
-        { text: "Humidity", value: "humidity" },
-        { text: "Clouds", value: "clouds" },
+        /*         { text: "Humidity", value: "humidity" },
+        { text: "Clouds", value: "clouds" }, */
         {
-          text: "5-day forecast",
+          text: "Get 5-day forecast",
           align: "start",
           sortable: false,
           value: "see_more"
@@ -90,8 +155,8 @@ export default {
         { text: "Temperature", value: "temp" },
         { text: "Max Temperature", value: "temp_max" },
         { text: "Min Temperature", value: "temp_min" },
-        { text: "Humidity", value: "humidity" },
-        { text: "Clouds", value: "clouds" },
+        /*      { text: "Humidity", value: "humidity" },
+        { text: "Clouds", value: "clouds" }, */
         {
           text: "Date and Time",
           align: "start",
@@ -104,7 +169,11 @@ export default {
       min: "",
       max: "",
       mean: "",
-      mode: ""
+      mode: "",
+      fiveDayMin: "",
+      fiveDayMax: "",
+      fiveDayMean: "",
+      fiveDayMode: ""
     };
   },
 
@@ -120,16 +189,14 @@ export default {
           let temp = res.main.temp;
           let temp_max = res.main.temp_max;
           let temp_min = res.main.temp_min;
-          let humidity = res.main.humidity;
-          let clouds = res.clouds.all;
+          /*      let humidity = res.main.humidity;
+          let clouds = res.clouds.all; */
           this.cities.push({
             city,
             weather,
             temp,
             temp_max,
-            temp_min,
-            humidity,
-            clouds
+            temp_min
           });
         })
         .catch(error => {
@@ -144,6 +211,7 @@ export default {
           `https://api.openweathermap.org/data/2.5/forecast?q=${city.city}&appid=${process.env.api}`
         )
         .then(res => {
+          this.$vuetify.goTo("#results");
           console.log(res);
           let day = new Date(res.list[0].dt * 1000);
           //   this.fiveDay.push(day);
@@ -154,8 +222,8 @@ export default {
             let temp = res.list[i].main.temp;
             let temp_max = res.list[i].main.temp_max;
             let temp_min = res.list[i].main.temp_min;
-            let humidity = res.list[i].main.humidity;
-            let clouds = res.list[i].clouds.all;
+            /*      let humidity = res.list[i].main.humidity;
+            let clouds = res.list[i].clouds.all; */
             let time = this.timeConverter(res.list[i].dt);
 
             this.fiveDay.push({
@@ -164,43 +232,42 @@ export default {
               temp,
               temp_max,
               temp_min,
-              humidity,
-              clouds,
               time
             });
           }
-          /*    let city = res.name;
-          let weather = res.weather[0].description;
-          let temp = res.main.temp;
-          let temp_max = res.main.temp_max;
-          let temp_min = res.main.temp_min;
-          let humidity = res.main.humidity;
-          let clouds = res.clouds.all;
-          this.cities.push({
-            city,
-            weather,
-            temp,
-            temp_max,
-            temp_min,
-            humidity,
-            clouds
-          }); */
         })
         .catch(error => {
           this.error = error;
         });
     },
-    showMin() {
-      let min = Math.min(...this.cities.map(city => city.temp_min));
-      this.min = min;
+
+    showMin(data) {
+      if (data == "cities") {
+        let min = Math.min(...this.cities.map(city => city.temp_min));
+        this.min = min;
+      } else {
+        let min = Math.min(...this.fiveDay.map(city => city.temp_min));
+        this.fiveDayMin = min;
+      }
     },
-    showMax() {
-      let max = Math.max(...this.cities.map(city => city.temp_max));
-      this.max = max;
+    showMax(data) {
+      if (data == "cities") {
+        let max = Math.max(...this.cities.map(city => city.temp_max));
+        this.max = max;
+      } else {
+        let max = Math.max(...this.fiveDay.map(city => city.temp_max));
+        this.fiveDayMax = max;
+      }
     },
-    showMean() {
+    showMean(data) {
       let total = 0;
-      let cities = [...this.cities];
+      let cities;
+
+      if (data == "cities") {
+        cities = [...this.cities];
+      } else {
+        cities = [...this.fiveDay];
+      }
 
       console.log(total);
       //total = total.temp.reduce((a, b) => a + b, 0);
@@ -211,16 +278,26 @@ export default {
       }
       let mean = total / cities.length;
 
-      this.mean = mean;
+      if (data == "cities") {
+        this.mean = mean;
+      } else {
+        this.fiveDayMean = mean;
+      }
     },
-    showMode() {
-      let cities = [...this.cities];
+    showMode(data) {
+      let cities;
       let numbers = [];
       let modes = [];
       let count = [];
       let i;
       let number;
       let maxIndex = 0;
+
+      if (data == "cities") {
+        cities = [...this.cities];
+      } else {
+        cities = [...this.fiveDay];
+      }
 
       for (let i = 0; i < cities.length; i += 1) {
         numbers.push(cities[i].temp);
@@ -243,7 +320,11 @@ export default {
           }
         }
 
-      this.mode = modes;
+      if (data == "cities") {
+        this.mode = modes;
+      } else {
+        this.fiveDayMode = modes;
+      }
     },
     timeConverter(UNIX_timestamp) {
       let unixDate = new Date(UNIX_timestamp * 1000);
@@ -270,3 +351,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.main-padding {
+  padding: 30px 5px;
+}
+</style>
