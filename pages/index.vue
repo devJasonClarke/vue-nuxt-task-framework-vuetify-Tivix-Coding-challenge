@@ -244,7 +244,11 @@ export default {
     },
     async fetchFiveDay(city) {
       this.fiveDay = [];
-      console.log("five");
+      this.fiveDayMin = "";
+      this.fiveDayMax = "";
+      this.fiveDayMean = "";
+      this.fiveDayMode = "";
+
       await this.$axios
         .$get(
           `https://api.openweathermap.org/data/2.5/forecast?q=${city.city}&units=metric&appid=${process.env.api}`
