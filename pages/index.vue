@@ -36,7 +36,10 @@
           ></v-col
         >
         <v-col>
-          <p>Minimum Temperature: {{ min }}</p></v-col
+          <p>
+            Minimum Temperature: {{ min }}
+            <span v-if="cities.length !== 0">°C</span>
+          </p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMax('cities')"
@@ -45,7 +48,10 @@
         >
 
         <v-col cols="12" sm="3">
-          <p>Maximum Temperature: {{ max }}</p></v-col
+          <p>
+            Maximum Temperature: {{ max }}
+            <span v-if="cities.length !== 0">°C</span>
+          </p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMean('cities')"
@@ -53,7 +59,10 @@
           ></v-col
         >
         <v-col>
-          <p>Mean Temperature: {{ mean }}</p></v-col
+          <p>
+            Mean Temperature: {{ mean }}
+            <span v-if="cities.length !== 0">°C</span>
+          </p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMode('cities')"
@@ -62,7 +71,10 @@
         >
 
         <v-col>
-          <p>Mode Temperature: {{ mode }}</p></v-col
+          <p>
+            Mode Temperature: {{ mode }}
+            <span v-if="cities.length !== 0">°C</span>
+          </p></v-col
         >
       </v-row>
     </v-container>
@@ -82,7 +94,10 @@
           ></v-col
         >
         <v-col>
-          <p>Minimum Temperature (5 days): {{ fiveDayMin }}</p></v-col
+          <p>
+            Minimum Temperature (5 days): {{ fiveDayMin }}
+            <span v-if="fiveDay.length !== 0">°C</span>
+          </p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMax('fiveDays')"
@@ -91,7 +106,10 @@
         >
 
         <v-col cols="12" sm="3">
-          <p>Maximum Temperature (5 days): {{ fiveDayMax }}</p></v-col
+          <p>
+            Maximum Temperature (5 days): {{ fiveDayMax }}
+            <span v-if="fiveDay.length !== 0">°C</span>
+          </p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMean('fiveDays')"
@@ -99,7 +117,10 @@
           ></v-col
         >
         <v-col>
-          <p>Mean Temperature (5 days): {{ fiveDayMean }}</p></v-col
+          <p>
+            Mean Temperature (5 days): {{ fiveDayMean }}
+            <span v-if="fiveDay.length !== 0">°C</span>
+          </p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMode('fiveDays')"
@@ -108,7 +129,10 @@
         >
 
         <v-col>
-          <p>Mode Temperature (5 days): {{ fiveDayMode }}</p></v-col
+          <p>
+            Mode Temperature (5 days): {{ fiveDayMode }}
+            <span v-if="fiveDay.length !== 0">°C</span>
+          </p></v-col
         >
       </v-row>
     </v-container>
@@ -142,9 +166,9 @@ export default {
           value: "city"
         },
         { text: "Weather", value: "weather" },
-        { text: "Temperature", value: "temp" },
-        { text: "Max Temperature", value: "temp_max" },
-        { text: "Min Temperature", value: "temp_min" },
+        { text: "Temperature °C", value: "temp" },
+        { text: "Max Temperature °C", value: "temp_max" },
+        { text: "Min Temperature °C", value: "temp_min" },
         /*         { text: "Humidity", value: "humidity" },
         { text: "Clouds", value: "clouds" }, */
         {
@@ -162,9 +186,9 @@ export default {
           value: "city"
         },
         { text: "Weather", value: "weather" },
-        { text: "Temperature", value: "temp" },
-        { text: "Max Temperature", value: "temp_max" },
-        { text: "Min Temperature", value: "temp_min" },
+        { text: "Temperature °C", value: "temp" },
+        { text: "Max Temperature °C", value: "temp_max" },
+        { text: "Min Temperature °C", value: "temp_min" },
         /*      { text: "Humidity", value: "humidity" },
         { text: "Clouds", value: "clouds" }, */
         {
@@ -185,7 +209,7 @@ export default {
       fiveDayMean: "",
       fiveDayMode: "",
       snackbar: false,
-      error: ''
+      error: ""
     };
   },
 
@@ -193,7 +217,7 @@ export default {
     async fetchApi() {
       await this.$axios
         .$get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${process.env.api}`
+          `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=${process.env.api}`
         )
         .then(res => {
           this.city = "";
@@ -213,7 +237,8 @@ export default {
           });
         })
         .catch(() => {
-          this.error = 'Something went wrong. Please check you spelling or the internet.';
+          this.error =
+            "Something went wrong. Please check you spelling or the internet.";
           this.snackbar = true;
         });
     },
@@ -222,7 +247,7 @@ export default {
       console.log("five");
       await this.$axios
         .$get(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${city.city}&appid=${process.env.api}`
+          `https://api.openweathermap.org/data/2.5/forecast?q=${city.city}&units=metric&appid=${process.env.api}`
         )
         .then(res => {
           this.$vuetify.goTo("#results");
