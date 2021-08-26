@@ -1,7 +1,7 @@
 <template>
   <v-main class="main-padding bg">
     <v-container>
-      <h1 class="mb-6">Tivix Coding Task</h1>
+      <h1 class="mb-6">Tivix Coding Task | Weather App</h1>
 
       <v-form @submit.prevent="verifyCity" class="pb-6">
         <v-row>

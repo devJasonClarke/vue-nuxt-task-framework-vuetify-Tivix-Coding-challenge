@@ -7,16 +7,14 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - tivix-coding-task',
-    title: 'tivix-coding-task',
+    title: 'Tivix Coding Task | Weather App',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
-    ],
+      { hid: 'description', name: 'description', content: 'Tivix Coding Task | Weather App' },
+       ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
     ]
   },
   env: {
