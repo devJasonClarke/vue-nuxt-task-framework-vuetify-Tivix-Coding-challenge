@@ -1,5 +1,3 @@
-# tivix-coding-task
-
 # Tivix Coding Task | Weather App 
 
 ## How to get it up and running:
@@ -26,6 +24,7 @@ $ npm run generate
 
 $✨ It's up ✨
 ```
+You can also check it out on Netlify: [https://Jason-Tivix-Coding-Task.netlify.app/](https://Jason-Tivix-Coding-Task.netlify.app/)
 
 ## Requirements
 
