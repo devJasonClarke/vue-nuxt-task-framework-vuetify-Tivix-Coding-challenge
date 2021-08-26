@@ -7,10 +7,10 @@
 $ npm install
 
 # '.env' file created for Open Weather Map Api key.
-$ Create a '.env' file in the root of the project.
+$ Create a '.env' file in the root of the project
 
-# set it to your Open Weather Map Api key.
-$ Create variable WEATHER_API and set it to your Open Weather Map Api key.
+# set your Open Weather Map Api key.
+$ Create variable WEATHER_API in '.env' file and set it to your Open Weather Map Api key
 
 # serve with hot reload at localhost:3000
 $ npm run dev
