@@ -1,9 +1,9 @@
 <template>
   <v-main class="main-padding bg">
     <v-container>
-      <h1>Tivix Coding Task</h1>
+      <h1 class="mb-6">Tivix Coding Task</h1>
 
-      <v-form @submit.prevent="fetchApi" class="mt-6">
+      <v-form @submit.prevent="verifyCity" class="pb-6">
         <v-row>
           <v-col cols="10">
             <v-text-field
@@ -13,7 +13,6 @@
               outlined
               dense
               v-model="city"
-              :rules="[v => !!v || 'City is required']"
             ></v-text-field
           ></v-col>
           <v-col>
@@ -67,7 +66,9 @@
         >
       </v-row>
     </v-container>
+    <v-divider class="mb-6"></v-divider>
     <v-container id="results">
+      <h2 class="mb-6">Five day forecast</h2>
       <v-data-table
         :headers="fiveDayHeaders"
         :items="fiveDay"
@@ -81,7 +82,7 @@
           ></v-col
         >
         <v-col>
-          <p>Minimum Temperature: {{ fiveDayMin }}</p></v-col
+          <p>Minimum Temperature (5 days): {{ fiveDayMin }}</p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMax('fiveDays')"
@@ -90,7 +91,7 @@
         >
 
         <v-col cols="12" sm="3">
-          <p>Maximum Temperature: {{ fiveDayMax }}</p></v-col
+          <p>Maximum Temperature (5 days): {{ fiveDayMax }}</p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMean('fiveDays')"
@@ -98,7 +99,7 @@
           ></v-col
         >
         <v-col>
-          <p>Mean Temperature: {{ fiveDayMean }}</p></v-col
+          <p>Mean Temperature (5 days): {{ fiveDayMean }}</p></v-col
         >
         <v-col cols="12" sm="3">
           <v-btn elevation="0" @click="showMode('fiveDays')"
@@ -107,10 +108,19 @@
         >
 
         <v-col>
-          <p>Mode Temperature: {{ fiveDayMode }}</p></v-col
+          <p>Mode Temperature (5 days): {{ fiveDayMode }}</p></v-col
         >
       </v-row>
     </v-container>
+    <v-snackbar v-model="snackbar">
+      {{ error }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-main>
 </template>
 <script>
@@ -173,7 +183,9 @@ export default {
       fiveDayMin: "",
       fiveDayMax: "",
       fiveDayMean: "",
-      fiveDayMode: ""
+      fiveDayMode: "",
+      snackbar: false,
+      error: ''
     };
   },
 
@@ -184,6 +196,7 @@ export default {
           `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${process.env.api}`
         )
         .then(res => {
+          this.city = "";
           let city = res.name;
           let weather = res.weather[0].description;
           let temp = res.main.temp;
@@ -199,8 +212,9 @@ export default {
             temp_min
           });
         })
-        .catch(error => {
-          this.error = error;
+        .catch(() => {
+          this.error = 'Something went wrong. Please check you spelling or the internet.';
+          this.snackbar = true;
         });
     },
     async fetchFiveDay(city) {
@@ -237,8 +251,17 @@ export default {
           }
         })
         .catch(error => {
+          this.snackbar = true;
           this.error = error;
         });
+    },
+    verifyCity() {
+      if (this.city !== "") {
+        this.fetchApi();
+      } else {
+        this.snackbar = true;
+        this.error = "City is required!";
+      }
     },
 
     showMin(data) {
