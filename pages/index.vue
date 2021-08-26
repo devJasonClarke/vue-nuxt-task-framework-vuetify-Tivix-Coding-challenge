@@ -345,7 +345,9 @@ export default {
       let year = unixDate.getFullYear();
       let month = months[unixDate.getMonth()];
       let date = unixDate.getDate();
-      let time = `${date} ${month} ${year}`;
+      var hour = unixDate.getHours();
+      var minutes = "0" + unixDate.getMinutes();
+      let time = `${date} ${month} ${year} - ${hour}:${minutes}`;
       return time;
     }
   }
