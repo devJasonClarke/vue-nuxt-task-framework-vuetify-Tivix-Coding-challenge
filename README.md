@@ -37,9 +37,3 @@ You can also check it out on Netlify: [https://Jason-Tivix-Coding-Task.netlify.a
  
 2. Call 5-day forecast on the target city and create different data tracker objects from above data tracker class:
 ● Show day temperature.
-
-- Import a HTML file and watch it magically convert to Markdown.
-- Drag and drop images (requires your Dropbox account be linked).
-- Import and save files from GitHub, Dropbox, Google Drive and One Drive.
-- Drag and drop markdown and HTML files into Dillinger.
-- Export documents as Markdown, HTML and PDF.
